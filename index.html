@@ -3,55 +3,320 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <meta
     name="description"
-    content="MeetingToM: Meeting-grounded Multimodal Theory-of-Mind Reasoning"
+    content="MeetingToM: Evaluating Multimodal LLMs on Theory-of-Mind Reasoning in Multi-Party Meetings"
   />
-  <meta name="theme-color" content="#070b12" />
-  <title>MeetingToM — Coming Soon</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <meta name="theme-color" content="#ffffff" />
+
+  <title>MeetingToM</title>
+
+  <link rel="stylesheet" href="style.css?v=section2-slider-1" />
 </head>
 
 <body>
-  <main class="hero">
-    <div class="content">
-      <h1>MeetingToM</h1>
+  <header class="topbar">
+    <a
+      class="labmark"
+      href="https://collegeai.tsinghua.edu.cn/en/Research/Research_Groups/MEOW_LAB_Modeling_Egocentric_Omniscient_Worlds_.htm"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Visit the MEOW LAB website"
+    >
+      <img src="images/meow-lab-logo.png" alt="Meow Lab logo" />
+      <span>MEOW LAB</span>
+    </a>
 
-      <p class="subtitle">
-        Meeting-grounded Multimodal Theory-of-Mind Reasoning
-      </p>
+    <!-- Replace #citation with the final paper URL after release. -->
+    <a class="paper-link" href="#citation">Paper</a>
+  </header>
 
-      <div class="status">Coming Soon</div>
+  <main id="top">
+    <section class="hero" aria-labelledby="project-title">
+      <div class="hero-inner">
 
-      <div class="buttons" aria-label="Project resources">
-        <a
-          class="button"
-          href="https://groups.inf.ed.ac.uk/ami/corpus/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          AMI Corpus
-        </a>
+        <h1 id="project-title">MeetingToM</h1>
 
-        <a
-          class="button"
-          href="https://huggingface.co/datasets/OliviaWang1101/MeetingToM"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Benchmark Data
-        </a>
+        <p class="paper-title">
+          Evaluating Multimodal LLMs on<br />
+          Theory-of-Mind Reasoning in Multi-Party Meetings
+        </p>
 
-        <a
-          class="button"
-          href="https://github.com/oliviaziyi/MeetingToM"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Code &amp; Scripts
-        </a>
+        <div class="authors" aria-label="Paper authors">
+          <a
+            class="author"
+            href="https://scholar.google.com/citations?user=rWG_KCEAAAAJ&hl=zh-CN"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ziyi Wang<sup>1,*</sup>
+          </a>
+
+          <a
+            class="author"
+            href="https://scholar.google.com/citations?user=Tq0Daq4AAAAJ&hl=zh-CN&oi=ao"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Yuhang Wu<sup>1,*</sup>
+          </a>
+
+          <a
+            class="author"
+            href="https://scholar.google.com/citations?user=q_LjXkMAAAAJ&hl=zh-CN&oi=sra"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Dongxu Piao<sup>1</sup>
+          </a>
+
+          <a
+            class="author"
+            href="https://scholar.google.com/citations?user=N9dtYvcAAAAJ&hl=zh-CN"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Xingyu Liu<sup>1</sup>
+          </a>
+
+          <a
+            class="author"
+            href="https://scholar.google.com/citations?user=aUerEOMAAAAJ&hl=zh-CN&oi=ao"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Tianhui Zhou<sup>2</sup>
+          </a>
+
+          <a
+            class="author"
+            href="https://scholar.google.com/citations?hl=zh-CN&user=Ud7boIwAAAAJ"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Miao Liu<sup>1,†</sup>
+          </a>
+        </div>
+
+        <div class="affiliations">
+          <p><sup>1</sup> College of AI, Tsinghua University</p>
+          <p>
+            <sup>2</sup> Department of Biostatistics and Bioinformatics,
+            Duke University
+          </p>
+        </div>
+
+        <p class="contribution-note">
+          <span>* Equal contribution</span>
+          <span>† Corresponding author</span>
+        </p>
+
+        <nav class="resource-links" aria-label="Project resources">
+          <a
+            class="resource resource-ami"
+            href="https://groups.inf.ed.ac.uk/ami/corpus/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            AMI Corpus
+          </a>
+
+          <a
+            class="resource resource-data"
+            href="https://huggingface.co/datasets/OliviaWang1101/MeetingToM"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Dataset
+          </a>
+
+          <a
+            class="resource resource-code"
+            href="https://github.com/oliviaziyi/MeetingToM"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Code
+          </a>
+        </nav>
       </div>
-    </div>
+
+      <a class="scroll-link" href="#hierarchy">
+        <span>Explore</span>
+        <span aria-hidden="true">↓</span>
+      </a>
+    </section>
+
+    <section class="editorial-section" id="hierarchy">
+      <div class="section-heading">
+        <span class="section-number">01</span>
+
+        <div class="section-copy">
+          <h2>Benchmark hierarchy</h2>
+          <p>
+            Subject-level, dyadic-level, and group-level Theory-of-Mind
+            reasoning in multi-party meetings.
+          </p>
+        </div>
+      </div>
+
+      <figure class="paper-figure">
+        <img
+          src="images/task-hierarchy.png"
+          alt="MeetingToM task hierarchy showing subject-level, dyadic-level, and group-level tasks"
+        />
+
+        <figcaption>
+          The hierarchical task structure of MeetingToM.
+        </figcaption>
+      </figure>
+    </section>
+
+
+    <section class="editorial-section showcase-section" id="overview">
+      <div class="section-heading">
+        <span class="section-number">02</span>
+
+        <div class="section-copy">
+          <h2>Benchmark overview</h2>
+          <p>
+            MeetingToM evaluates Theory-of-Mind reasoning in multi-party meetings.
+            This section highlights the task structure and a representative example.
+          </p>
+        </div>
+
+        <div class="section-side-note">Scroll →</div>
+      </div>
+
+      <div class="showcase-rail" aria-label="Benchmark highlights">
+        <article class="showcase-card showcase-card-task">
+          <div class="showcase-media">
+            <img
+              src="images/task-overview.png"
+              alt="MeetingToM task overview showing subject-level, dyadic-level, and group-level tasks"
+            />
+          </div>
+
+          <div class="showcase-meta">
+            <p class="showcase-kicker">Task structure</p>
+            <h3>Three levels of meeting-grounded social reasoning</h3>
+            <p>
+              The benchmark is organized into subject-level, dyadic-level, and
+              group-level tasks, covering mental states, addressee and attitude,
+              and consensus dynamics.
+            </p>
+          </div>
+        </article>
+
+        <article class="showcase-card showcase-card-example">
+          <div class="showcase-media">
+            <img
+              src="images/example-pseudo-consensus.png"
+              alt="Example of pseudo-consensus in MeetingToM"
+            />
+          </div>
+
+          <div class="showcase-meta">
+            <p class="showcase-kicker">Representative example</p>
+            <h3>Beyond surface agreement</h3>
+            <p>
+              Apparent agreement can conceal hesitation or hidden disagreement.
+              The benchmark emphasizes how verbal and non-verbal evidence reveal
+              subtle group dynamics over time.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="editorial-section citation-section" id="citation">
+      <div class="section-heading">
+        <span class="section-number">03</span>
+
+        <div class="section-copy">
+          <h2>Citation</h2>
+          <p>
+            The publication venue and final citation will be updated
+            with the paper release.
+          </p>
+        </div>
+      </div>
+
+      <div class="bibtex-wrap">
+        <button class="copy-button" id="copy-button" type="button">
+          Copy BibTeX
+        </button>
+
+        <pre><code id="bibtex">@misc{wang2026meetingtom,
+  title  = {MeetingToM: Evaluating Multimodal LLMs on Theory-of-Mind Reasoning in Multi-Party Meetings},
+  author = {Wang, Ziyi and Wu, Yuhang and Piao, Dongxu and Liu, Xingyu and Zhou, Tianhui and Liu, Miao},
+  year   = {2026},
+  note   = {Preprint}
+}</code></pre>
+      </div>
+
+      <p class="copy-status" id="copy-status" aria-live="polite"></p>
+    </section>
+
+    <section class="editorial-section acknowledgements-section" id="acknowledgements">
+      <div class="section-heading">
+        <span class="section-number">04</span>
+
+        <div class="section-copy">
+          <h2>Acknowledgements</h2>
+        </div>
+      </div>
+
+      <div class="acknowledgements-copy">
+        <p>
+          MeetingToM is built upon the
+          <a
+            href="https://groups.inf.ed.ac.uk/ami/corpus/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            AMI Meeting Corpus
+          </a>.
+          Original meeting recordings and source materials should be obtained
+          from the official AMI Corpus website.
+        </p>
+
+        <p class="acknowledgements-placeholder">
+          Additional acknowledgements and funding information will be added
+          with the paper release.
+        </p>
+      </div>
+    </section>
   </main>
+
+  <footer>
+    <span>MeetingToM</span>
+    <span>2026</span>
+  </footer>
+
+  <script>
+    const copyButton = document.getElementById("copy-button");
+    const bibtex = document.getElementById("bibtex");
+    const copyStatus = document.getElementById("copy-status");
+
+    copyButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(bibtex.innerText);
+
+        copyButton.textContent = "Copied";
+        copyStatus.textContent = "BibTeX copied to clipboard.";
+
+        window.setTimeout(() => {
+          copyButton.textContent = "Copy BibTeX";
+          copyStatus.textContent = "";
+        }, 1800);
+      } catch (error) {
+        copyStatus.textContent =
+          "Please select and copy the BibTeX manually.";
+      }
+    });
+  </script>
 </body>
 </html>
