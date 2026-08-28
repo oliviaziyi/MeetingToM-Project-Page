@@ -13,7 +13,411 @@
 
   <title>MeetingToM</title>
 
-  <link rel="stylesheet" href="style.css?v=section2-slider-1" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Small additions for the new content only. The original visual system remains in style.css. -->
+  <style>
+    .paper-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: flex-end;
+      gap: 0.72rem;
+      flex-wrap: wrap;
+    }
+
+    .venue-note {
+      font-size: 0.62rem;
+      line-height: 1.1;
+      letter-spacing: 0.035em;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.46);
+      white-space: nowrap;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .venue-note::after {
+      content: "·";
+      display: inline-block;
+      margin-left: 0.72rem;
+      color: rgba(0, 0, 0, 0.24);
+      font-weight: 400;
+    }
+
+    .paper-meta .arxiv-link,
+    .paper-meta .paper-link {
+      color: #ef7ea8;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(239, 126, 168, 0.82);
+      padding-bottom: 0.04rem;
+    }
+
+    .paper-meta .arxiv-link:hover,
+    .paper-meta .arxiv-link:focus-visible,
+    .paper-meta .paper-link:hover,
+    .paper-meta .paper-link:focus-visible {
+      opacity: 0.78;
+    }
+
+    .overview-copy {
+      width: min(100%, 820px);
+      margin: 0 auto;
+    }
+
+    .overview-copy p {
+      margin-top: 0;
+      margin-bottom: 1.1rem;
+      font-size: clamp(0.98rem, 1.12vw, 1.05rem);
+      line-height: 1.72;
+    }
+
+    .overview-copy p:last-child {
+      margin-bottom: 0;
+    }
+
+    .overview-copy strong {
+      color: #ef7ea8;
+      font-weight: 600;
+    }
+
+    .paper-figure.compact-figure {
+      width: min(100%, 820px);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .paper-figure.compact-figure img {
+      width: 100%;
+      height: auto;
+    }
+
+    .task-browser {
+      width: min(100%, 920px);
+      margin: 0 auto;
+    }
+
+    .task-switcher {
+      display: flex;
+      justify-content: center;
+      gap: 0.55rem;
+      margin: 0 0 1.35rem;
+      padding: 0;
+      border: 0;
+      flex-wrap: wrap;
+    }
+
+    .task-switch {
+      appearance: none;
+      min-width: 4.7rem;
+      padding: 0.58rem 0.9rem;
+      border: 1px solid rgba(239, 126, 168, 0.3);
+      border-radius: 999px;
+      background: #fff;
+      color: rgba(37, 31, 39, 0.58);
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 650;
+      letter-spacing: 0.015em;
+      cursor: pointer;
+      transition: color 160ms ease, background 160ms ease, border-color 160ms ease,
+        transform 160ms ease;
+    }
+
+    .task-switch:hover,
+    .task-switch:focus-visible {
+      color: #ef7ea8;
+      border-color: #ef7ea8;
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .task-switch.active,
+    .task-switch[aria-selected="true"] {
+      color: #fff;
+      background: #ef7ea8;
+      border-color: #ef7ea8;
+    }
+
+    .task-example {
+      overflow: hidden;
+      border: 1px solid rgba(37, 31, 39, 0.1);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 18px 55px rgba(58, 42, 51, 0.08);
+    }
+
+    .task-example-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.15rem 1.25rem;
+      border-bottom: 1px solid rgba(37, 31, 39, 0.08);
+    }
+
+    .task-example-title {
+      margin: 0;
+      font-size: clamp(1rem, 1.5vw, 1.18rem);
+      line-height: 1.35;
+    }
+
+    .task-example-description {
+      margin: 0.28rem 0 0;
+      color: rgba(37, 31, 39, 0.58);
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .task-field {
+      flex: 0 0 auto;
+      margin-top: 0.08rem;
+      color: #ef7ea8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .task-video-slot {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #f6f2f4;
+    }
+
+    .jsonl-panel {
+      border-top: 1px solid rgba(37, 31, 39, 0.08);
+      background: #faf8f9;
+    }
+
+    .jsonl-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.78rem 1.05rem 0;
+      color: rgba(37, 31, 39, 0.5);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .jsonl-source-id {
+      overflow: hidden;
+      color: rgba(37, 31, 39, 0.42);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-overflow: ellipsis;
+      text-transform: none;
+      white-space: nowrap;
+    }
+
+    .jsonl-record {
+      margin: 0;
+      padding: 0.85rem 1.05rem 1.15rem;
+      overflow-x: auto;
+      color: #4c4249;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: clamp(0.72rem, 1.15vw, 0.82rem);
+      line-height: 1.65;
+      white-space: pre;
+    }
+
+    .citation-section .section-heading {
+      margin-bottom: 0.7rem;
+    }
+
+    .citation-panel {
+      width: min(100%, 900px);
+      margin: 0 auto;
+    }
+
+    .citation-toolbar {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.25rem;
+      margin-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .citation-tabs {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.35rem;
+      min-width: 0;
+    }
+
+    .citation-tab {
+      appearance: none;
+      border: 0;
+      border-bottom: 1.5px solid transparent;
+      background: transparent;
+      margin: 0;
+      padding: 0 0 0.52rem;
+      color: rgba(0, 0, 0, 0.46);
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      line-height: 1.2;
+      cursor: pointer;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .citation-tab:hover,
+    .citation-tab:focus-visible {
+      color: #ef7ea8;
+      outline: none;
+    }
+
+    .citation-tab.active,
+    .citation-tab[aria-selected="true"] {
+      color: #ef7ea8;
+      border-bottom-color: #ef7ea8;
+      font-weight: 600;
+    }
+
+    .citation-section .copy-button {
+      position: static !important;
+      flex: 0 0 auto;
+      display: inline-block;
+      margin: 0 0 0.48rem !important;
+      z-index: auto !important;
+    }
+
+    .citation-content {
+      margin: 0 !important;
+      min-height: 10.2rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: clamp(0.84rem, 0.98vw, 0.92rem);
+      line-height: 1.65;
+    }
+
+    .citation-content code {
+      font-size: inherit;
+      font-family: inherit;
+    }
+
+    .citation-content[data-format="bibtex"] code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+    }
+
+    .citation-content:not([data-format="bibtex"]) {
+      display: flex;
+      align-items: flex-start;
+      min-height: 7rem;
+    }
+
+    .citation-content:not([data-format="bibtex"]) code {
+      font-family: inherit;
+      max-width: 100%;
+    }
+
+    /* Keep the final acknowledgements section compact instead of inheriting
+       the larger editorial-section vertical rhythm used above. */
+    .acknowledgements-section {
+      min-height: 0 !important;
+      padding-top: 2.7rem !important;
+      padding-bottom: 2.6rem !important;
+    }
+
+    .acknowledgements-section .section-heading {
+      margin-bottom: 0.55rem;
+    }
+
+    .acknowledgements-copy {
+      width: min(100%, 920px);
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .acknowledgements-copy .ack-main {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.72;
+      color: rgba(0, 0, 0, 0.78);
+    }
+
+    .acknowledgements-copy a {
+      color: #ef7ea8;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(239, 126, 168, 0.75);
+      padding-bottom: 0.02rem;
+    }
+
+    .acknowledgements-copy a:hover,
+    .acknowledgements-copy a:focus-visible {
+      opacity: 0.8;
+    }
+
+    footer {
+      margin-top: 0 !important;
+    }
+
+    @media (max-width: 760px) {
+      .acknowledgements-section {
+        padding-top: 2.1rem !important;
+        padding-bottom: 2.1rem !important;
+      }
+
+      .paper-meta {
+        gap: 0.5rem;
+      }
+
+      .venue-note {
+        width: 100%;
+        white-space: normal;
+        text-align: right;
+      }
+
+      .venue-note::after {
+        display: none;
+      }
+
+      .task-example-header {
+        padding: 1rem;
+      }
+
+      .task-field {
+        font-size: 0.68rem;
+      }
+
+      .jsonl-label {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.28rem;
+      }
+
+      .citation-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+
+      .citation-tabs {
+        width: 100%;
+        gap: 1rem;
+        overflow-x: auto;
+      }
+
+      .citation-section .copy-button {
+        align-self: flex-end;
+        margin-bottom: 0.55rem !important;
+      }
+
+      .citation-content {
+        min-height: 0;
+        font-size: 0.82rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -29,8 +433,25 @@
       <span>MEOW LAB</span>
     </a>
 
-    <!-- Replace #citation with the final paper URL after release. -->
-    <a class="paper-link" href="#citation">Paper</a>
+    <div class="paper-meta" aria-label="Paper links and publication status">
+      <span class="venue-note">EMNLP 2026 · Main Conference</span>
+      <a
+        class="paper-link"
+        href="https://arxiv.org/pdf/2607.19235"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Paper
+      </a>
+      <a
+        class="paper-link arxiv-link"
+        href="https://arxiv.org/abs/2607.19235"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        arXiv
+      </a>
+    </div>
   </header>
 
   <main id="top">
@@ -143,15 +564,82 @@
         </nav>
       </div>
 
-      <a class="scroll-link" href="#hierarchy">
+      <a class="scroll-link" href="#examples">
         <span>Explore</span>
         <span aria-hidden="true">↓</span>
       </a>
     </section>
 
-    <section class="editorial-section" id="hierarchy">
+    <section class="editorial-section" id="examples">
       <div class="section-heading">
         <span class="section-number">01</span>
+
+        <div class="section-copy">
+          <h2>Explore the tasks</h2>
+          <p>
+            Browse one representative record for each MeetingToM subtask.
+          </p>
+        </div>
+      </div>
+
+      <div class="task-browser">
+        <div class="task-switcher" role="tablist" aria-label="MeetingToM task examples">
+          <button class="task-switch active" id="task-tab-1" type="button" role="tab" aria-selected="true" aria-controls="task-example-panel" data-task="task1">Task 1</button>
+          <button class="task-switch" id="task-tab-21" type="button" role="tab" aria-selected="false" aria-controls="task-example-panel" data-task="task21">Task 2.1</button>
+          <button class="task-switch" id="task-tab-22" type="button" role="tab" aria-selected="false" aria-controls="task-example-panel" data-task="task22">Task 2.2</button>
+          <button class="task-switch" id="task-tab-31" type="button" role="tab" aria-selected="false" aria-controls="task-example-panel" data-task="task31">Task 3.1</button>
+          <button class="task-switch" id="task-tab-32" type="button" role="tab" aria-selected="false" aria-controls="task-example-panel" data-task="task32">Task 3.2</button>
+        </div>
+
+        <article class="task-example" id="task-example-panel" role="tabpanel" aria-labelledby="task-tab-1">
+          <div class="task-example-header">
+            <div>
+              <h3 class="task-example-title" id="task-example-title"></h3>
+              <p class="task-example-description" id="task-example-description"></p>
+            </div>
+            <span class="task-field" id="task-field"></span>
+          </div>
+
+          <div class="task-video-slot" role="img" aria-label="Reserved space for the task video"></div>
+
+          <div class="jsonl-panel">
+            <div class="jsonl-label">
+              <span>JSONL · one released record</span>
+              <span class="jsonl-source-id" id="jsonl-source-id"></span>
+            </div>
+            <pre class="jsonl-record"><code id="jsonl-record"></code></pre>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="editorial-section" id="overview">
+      <div class="section-heading">
+        <span class="section-number">02</span>
+
+        <div class="section-copy">
+          <h2>Motivation and Overview</h2>
+          <p>
+            Evaluating the social reasoning abilities that support collaboration
+            in naturalistic multi-party meetings.
+          </p>
+        </div>
+      </div>
+
+      <div class="overview-copy">
+        <p>
+          Effective collaboration requires more than understanding what people explicitly say. In meetings and other professional interactions, people continuously infer others’ beliefs, intentions, knowledge, attitudes, and unspoken disagreement to coordinate, negotiate, and adapt their communication. These latent social states are distributed across verbal and non-verbal cues, and apparent agreement can mask private dissent, creating <strong>pseudo-consensus</strong> that is difficult to detect from surface behavior alone. While such Theory-of-Mind (ToM) reasoning is fundamental to human collaboration, current multimodal AI systems are still largely evaluated on overt and externally verifiable signals.
+        </p>
+
+        <p>
+          <strong>MeetingToM</strong> addresses this gap by evaluating multimodal large language models in naturalistic four-person meetings through a hierarchical benchmark spanning <strong>subject-, dyadic-, and group-level reasoning</strong>. Built on the AMI Meeting Corpus, it contains <strong>1,800 annotated clips from 60 meetings</strong>, covering individual mental-state inference, addressee and interpersonal-attitude reasoning, and group consensus and hidden dissent. By jointly examining verbal and visual evidence, MeetingToM tests whether current MLLMs can move beyond surface-level recognition toward the socially grounded reasoning required for real-world collaboration.
+        </p>
+      </div>
+    </section>
+
+    <section class="editorial-section" id="hierarchy">
+      <div class="section-heading">
+        <span class="section-number">03</span>
 
         <div class="section-copy">
           <h2>Benchmark hierarchy</h2>
@@ -162,7 +650,7 @@
         </div>
       </div>
 
-      <figure class="paper-figure">
+      <figure class="paper-figure compact-figure">
         <img
           src="images/task-hierarchy.png"
           alt="MeetingToM task hierarchy showing subject-level, dyadic-level, and group-level tasks"
@@ -175,94 +663,76 @@
     </section>
 
 
-    <section class="editorial-section showcase-section" id="overview">
-      <div class="section-heading">
-        <span class="section-number">02</span>
-
-        <div class="section-copy">
-          <h2>Benchmark overview</h2>
-          <p>
-            MeetingToM evaluates Theory-of-Mind reasoning in multi-party meetings.
-            This section highlights the task structure and a representative example.
-          </p>
-        </div>
-
-        <div class="section-side-note">Scroll →</div>
-      </div>
-
-      <div class="showcase-rail" aria-label="Benchmark highlights">
-        <article class="showcase-card showcase-card-task">
-          <div class="showcase-media">
-            <img
-              src="images/task-overview.png"
-              alt="MeetingToM task overview showing subject-level, dyadic-level, and group-level tasks"
-            />
-          </div>
-
-          <div class="showcase-meta">
-            <p class="showcase-kicker">Task structure</p>
-            <h3>Three levels of meeting-grounded social reasoning</h3>
-            <p>
-              The benchmark is organized into subject-level, dyadic-level, and
-              group-level tasks, covering mental states, addressee and attitude,
-              and consensus dynamics.
-            </p>
-          </div>
-        </article>
-
-        <article class="showcase-card showcase-card-example">
-          <div class="showcase-media">
-            <img
-              src="images/example-pseudo-consensus.png"
-              alt="Example of pseudo-consensus in MeetingToM"
-            />
-          </div>
-
-          <div class="showcase-meta">
-            <p class="showcase-kicker">Representative example</p>
-            <h3>Beyond surface agreement</h3>
-            <p>
-              Apparent agreement can conceal hesitation or hidden disagreement.
-              The benchmark emphasizes how verbal and non-verbal evidence reveal
-              subtle group dynamics over time.
-            </p>
-          </div>
-        </article>
-      </div>
-    </section>
-
     <section class="editorial-section citation-section" id="citation">
       <div class="section-heading">
-        <span class="section-number">03</span>
+        <span class="section-number">04</span>
 
         <div class="section-copy">
           <h2>Citation</h2>
-          <p>
-            The publication venue and final citation will be updated
-            with the paper release.
-          </p>
         </div>
       </div>
 
-      <div class="bibtex-wrap">
-        <button class="copy-button" id="copy-button" type="button">
-          Copy BibTeX
-        </button>
+      <div class="citation-panel">
+        <div class="citation-toolbar">
+          <div class="citation-tabs" role="tablist" aria-label="Citation formats">
+            <button
+              class="citation-tab active"
+              id="tab-bibtex"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="citation-content"
+              data-format="bibtex"
+            >BibTeX</button>
+            <button
+              class="citation-tab"
+              id="tab-apa"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="citation-content"
+              data-format="apa"
+            >APA</button>
+            <button
+              class="citation-tab"
+              id="tab-mla"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="citation-content"
+              data-format="mla"
+            >MLA</button>
+            <button
+              class="citation-tab"
+              id="tab-chicago"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="citation-content"
+              data-format="chicago"
+            >Chicago</button>
+          </div>
 
-        <pre><code id="bibtex">@misc{wang2026meetingtom,
-  title  = {MeetingToM: Evaluating Multimodal LLMs on Theory-of-Mind Reasoning in Multi-Party Meetings},
-  author = {Wang, Ziyi and Wu, Yuhang and Piao, Dongxu and Liu, Xingyu and Zhou, Tianhui and Liu, Miao},
-  year   = {2026},
-  note   = {Preprint}
-}</code></pre>
+          <button class="copy-button" id="copy-button" type="button">
+            Copy BibTeX
+          </button>
+        </div>
+
+        <pre
+          class="citation-content"
+          id="citation-content"
+          role="tabpanel"
+          aria-labelledby="tab-bibtex"
+          data-format="bibtex"
+        ><code id="citation-text"></code></pre>
+
+        <p class="copy-status" id="copy-status" aria-live="polite"></p>
       </div>
-
-      <p class="copy-status" id="copy-status" aria-live="polite"></p>
     </section>
 
     <section class="editorial-section acknowledgements-section" id="acknowledgements">
       <div class="section-heading">
-        <span class="section-number">04</span>
+        <span class="section-number">05</span>
 
         <div class="section-copy">
           <h2>Acknowledgements</h2>
@@ -270,53 +740,205 @@
       </div>
 
       <div class="acknowledgements-copy">
-        <p>
+        <p class="ack-main">
           MeetingToM is built upon the
           <a
             href="https://groups.inf.ed.ac.uk/ami/corpus/"
             target="_blank"
             rel="noopener noreferrer"
-          >
-            AMI Meeting Corpus
-          </a>.
-          Original meeting recordings and source materials should be obtained
-          from the official AMI Corpus website.
-        </p>
-
-        <p class="acknowledgements-placeholder">
-          Additional acknowledgements and funding information will be added
-          with the paper release.
+          >AMI Meeting Corpus</a>.
+          We thank the AMI team for making synchronized multi-view recordings, transcripts,
+          and metadata available to the research community. MeetingToM provides benchmark
+          annotations and reconstruction resources but does not redistribute the original
+          AMI recordings, which should be obtained directly from the official corpus.
         </p>
       </div>
     </section>
   </main>
 
-  <footer>
-    <span>MeetingToM</span>
-    <span>2026</span>
-  </footer>
+  <footer aria-hidden="true"></footer>
 
   <script>
+    const taskExamples = {
+      task1: {
+        tabId: "task-tab-1",
+        title: "Task 1 · Mental State Prediction",
+        description: "Infer the target participant’s current mental state from a five-second close-up clip.",
+        field: "Q1 · mental state",
+        id: "state:ES2002a_state0004_w0",
+        record: {
+          id: "state:ES2002a_state0004_w0",
+          task: "state",
+          bundle_name: "ES2002a_state0004_w0",
+          source_bundle_name: "ES2002a_state0004",
+          session_id: "ES2002a",
+          window_index: 0,
+          answers: { Q1: "COGNITIVE_CONFLICT" }
+        }
+      },
+      task21: {
+        tabId: "task-tab-21",
+        title: "Task 2.1 · Addressee Identification",
+        description: "Identify who the current speaker addresses using the global Corner view.",
+        field: "Q1 · addressee",
+        id: "you:ES2002a_you0008",
+        record: {
+          id: "you:ES2002a_you0008",
+          task: "you",
+          bundle_name: "ES2002a_you0008",
+          session_id: "ES2002a",
+          answers: { Q1: "D", Q2: "SUPPORT" }
+        }
+      },
+      task22: {
+        tabId: "task-tab-22",
+        title: "Task 2.2 · Attitude Inference",
+        description: "Infer the addressee’s stance from the synchronized 2×2 close-up mosaic.",
+        field: "Q2 · attitude",
+        id: "you:ES2002a_you0008",
+        record: {
+          id: "you:ES2002a_you0008",
+          task: "you",
+          bundle_name: "ES2002a_you0008",
+          session_id: "ES2002a",
+          answers: { Q1: "D", Q2: "SUPPORT" }
+        }
+      },
+      task31: {
+        tabId: "task-tab-31",
+        title: "Task 3.1 · Consensus Classification",
+        description: "Classify whether the group reaches true, pseudo, no, or uncertain consensus.",
+        field: "Q1 · consensus",
+        id: "consensus:ES2003d_consensus0005",
+        record: {
+          id: "consensus:ES2003d_consensus0005",
+          task: "consensus",
+          bundle_name: "ES2003d_consensus0005",
+          session_id: "ES2003d",
+          answers: { Q1: "PSEUDO_CONSENSUS", Q2: "B" }
+        }
+      },
+      task32: {
+        tabId: "task-tab-32",
+        title: "Task 3.2 · Dissenter Identification",
+        description: "When pseudo-consensus is present, identify the participant with hidden dissent.",
+        field: "Q2 · dissenter",
+        id: "consensus:ES2003d_consensus0005",
+        record: {
+          id: "consensus:ES2003d_consensus0005",
+          task: "consensus",
+          bundle_name: "ES2003d_consensus0005",
+          session_id: "ES2003d",
+          answers: { Q1: "PSEUDO_CONSENSUS", Q2: "B" }
+        }
+      }
+    };
+
+    const taskTabs = Array.from(document.querySelectorAll(".task-switch"));
+    const taskPanel = document.getElementById("task-example-panel");
+    const taskTitle = document.getElementById("task-example-title");
+    const taskDescription = document.getElementById("task-example-description");
+    const taskField = document.getElementById("task-field");
+    const jsonlSourceId = document.getElementById("jsonl-source-id");
+    const jsonlRecord = document.getElementById("jsonl-record");
+
+    function renderTaskExample(taskKey) {
+      const example = taskExamples[taskKey];
+      taskTitle.textContent = example.title;
+      taskDescription.textContent = example.description;
+      taskField.textContent = example.field;
+      jsonlSourceId.textContent = example.id;
+      jsonlRecord.textContent = JSON.stringify(example.record, null, 2);
+      taskPanel.setAttribute("aria-labelledby", example.tabId);
+
+      taskTabs.forEach((tab) => {
+        const isActive = tab.dataset.task === taskKey;
+        tab.classList.toggle("active", isActive);
+        tab.setAttribute("aria-selected", String(isActive));
+        tab.tabIndex = isActive ? 0 : -1;
+      });
+    }
+
+    taskTabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => renderTaskExample(tab.dataset.task));
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+        event.preventDefault();
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const nextIndex = (index + direction + taskTabs.length) % taskTabs.length;
+        taskTabs[nextIndex].focus();
+        renderTaskExample(taskTabs[nextIndex].dataset.task);
+      });
+    });
+
+    const citations = {
+      bibtex: `@misc{wang2026meetingtom,
+  title         = {MeetingToM: Evaluating Multimodal LLMs on Theory-of-Mind Reasoning in Multi-Party Meetings},
+  author        = {Ziyi Wang and Yuhang Wu and Dongxu Piao and Xingyu Liu and Tianhui Zhou and Miao Liu},
+  year          = {2026},
+  eprint        = {2607.19235},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2607.19235}
+}`,
+      apa: `Wang, Z., Wu, Y., Piao, D., Liu, X., Zhou, T., & Liu, M. (2026). MeetingToM: Evaluating multimodal LLMs on theory-of-mind reasoning in multi-party meetings. arXiv. https://arxiv.org/abs/2607.19235`,
+      mla: `Wang, Ziyi, et al. “MeetingToM: Evaluating Multimodal LLMs on Theory-of-Mind Reasoning in Multi-Party Meetings.” arXiv, 2026, arXiv:2607.19235, https://arxiv.org/abs/2607.19235.`,
+      chicago: `Wang, Ziyi, Yuhang Wu, Dongxu Piao, Xingyu Liu, Tianhui Zhou, and Miao Liu. 2026. “MeetingToM: Evaluating Multimodal LLMs on Theory-of-Mind Reasoning in Multi-Party Meetings.” arXiv. https://arxiv.org/abs/2607.19235.`
+    };
+
+    const formatLabels = {
+      bibtex: "BibTeX",
+      apa: "APA",
+      mla: "MLA",
+      chicago: "Chicago"
+    };
+
+    const citationTabs = document.querySelectorAll(".citation-tab");
+    const citationContent = document.getElementById("citation-content");
+    const citationText = document.getElementById("citation-text");
     const copyButton = document.getElementById("copy-button");
-    const bibtex = document.getElementById("bibtex");
     const copyStatus = document.getElementById("copy-status");
+
+    let activeFormat = "bibtex";
+
+    function renderCitation(format) {
+      activeFormat = format;
+      citationText.textContent = citations[format];
+      citationContent.dataset.format = format;
+      citationContent.setAttribute("aria-labelledby", `tab-${format}`);
+      copyButton.textContent = `Copy ${formatLabels[format]}`;
+      copyStatus.textContent = "";
+
+      citationTabs.forEach((tab) => {
+        const isActive = tab.dataset.format === format;
+        tab.classList.toggle("active", isActive);
+        tab.setAttribute("aria-selected", String(isActive));
+      });
+    }
+
+    citationTabs.forEach((tab) => {
+      tab.addEventListener("click", () => renderCitation(tab.dataset.format));
+    });
 
     copyButton.addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(bibtex.innerText);
+        await navigator.clipboard.writeText(citations[activeFormat]);
 
         copyButton.textContent = "Copied";
-        copyStatus.textContent = "BibTeX copied to clipboard.";
+        copyStatus.textContent = `${formatLabels[activeFormat]} citation copied to clipboard.`;
 
         window.setTimeout(() => {
-          copyButton.textContent = "Copy BibTeX";
+          copyButton.textContent = `Copy ${formatLabels[activeFormat]}`;
           copyStatus.textContent = "";
         }, 1800);
       } catch (error) {
-        copyStatus.textContent =
-          "Please select and copy the BibTeX manually.";
+        copyStatus.textContent = "Please select and copy the citation manually.";
       }
     });
+
+    renderTaskExample("task1");
+    renderCitation("bibtex");
   </script>
 </body>
 </html>
+
