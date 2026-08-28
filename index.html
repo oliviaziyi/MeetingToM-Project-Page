@@ -179,9 +179,126 @@
     }
 
     .task-video-slot {
+      position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
-      background: #f6f2f4;
+      overflow: hidden;
+      background: #171418;
+    }
+
+    .task-video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #171418;
+    }
+
+    .task-details {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+      gap: 0;
+      padding: 0.9rem 1.05rem 1rem;
+      border-top: 1px solid rgba(37, 31, 39, 0.08);
+      background: #fff;
+    }
+
+    .task-detail-card {
+      min-width: 0;
+      padding: 0;
+    }
+
+    .task-detail-card:first-child {
+      padding-right: 1.25rem;
+      border-right: 1px solid rgba(37, 31, 39, 0.09);
+    }
+
+    .task-detail-card:last-child {
+      padding-left: 1.25rem;
+    }
+
+    .task-detail-label {
+      margin: 0 0 0.48rem;
+      color: rgba(37, 31, 39, 0.46);
+      font-size: 0.66rem;
+      font-weight: 750;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .task-question {
+      margin: 0;
+      color: #2d272b;
+      font-size: clamp(0.92rem, 1.25vw, 1.02rem);
+      font-weight: 620;
+      line-height: 1.55;
+    }
+
+    .ground-truth {
+      display: flex;
+      align-items: baseline;
+      gap: 0.55rem;
+      margin-top: 0.55rem;
+    }
+
+    .ground-truth-label {
+      color: rgba(37, 31, 39, 0.46);
+      font-size: 0.69rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .ground-truth-value {
+      color: #ef7ea8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.78rem;
+      font-weight: 750;
+    }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      overflow: hidden;
+      border: 1px solid rgba(37, 31, 39, 0.09);
+      border-radius: 10px;
+    }
+
+    .map-tile {
+      min-width: 0;
+      padding: 0.62rem 0.68rem;
+      background: #fff;
+    }
+
+    .map-tile:nth-child(odd) {
+      border-right: 1px solid rgba(37, 31, 39, 0.09);
+    }
+
+    .map-tile:nth-child(-n + 2) {
+      border-bottom: 1px solid rgba(37, 31, 39, 0.09);
+    }
+
+    .map-tile.is-target {
+      background: rgba(239, 126, 168, 0.12);
+    }
+
+    .map-position {
+      display: block;
+      overflow: hidden;
+      color: rgba(37, 31, 39, 0.46);
+      font-size: 0.63rem;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .map-agent {
+      display: block;
+      margin-top: 0.18rem;
+      color: #2d272b;
+      font-size: 0.86rem;
+      font-weight: 750;
     }
 
     .jsonl-panel {
@@ -387,6 +504,21 @@
 
       .task-field {
         font-size: 0.68rem;
+      }
+
+      .task-details {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+
+      .task-detail-card:first-child {
+        padding: 0 0 1rem;
+        border-right: 0;
+        border-bottom: 1px solid rgba(37, 31, 39, 0.09);
+      }
+
+      .task-detail-card:last-child {
+        padding: 1rem 0 0;
       }
 
       .jsonl-label {
@@ -600,7 +732,33 @@
             <span class="task-field" id="task-field"></span>
           </div>
 
-          <div class="task-video-slot" role="img" aria-label="Reserved space for the task video"></div>
+          <div class="task-video-slot">
+            <video
+              class="task-video"
+              id="task-video"
+              controls
+              playsinline
+              preload="metadata"
+            >
+              Your browser does not support HTML5 video.
+            </video>
+          </div>
+
+          <div class="task-details">
+            <section class="task-detail-card" aria-labelledby="question-label">
+              <p class="task-detail-label" id="question-label">Question</p>
+              <p class="task-question" id="task-question"></p>
+              <div class="ground-truth">
+                <span class="ground-truth-label">Ground truth</span>
+                <span class="ground-truth-value" id="ground-truth-value"></span>
+              </div>
+            </section>
+
+            <section class="task-detail-card" aria-labelledby="map-label">
+              <p class="task-detail-label" id="map-label">Participant / camera map</p>
+              <div class="map-grid" id="map-grid"></div>
+            </section>
+          </div>
 
           <div class="jsonl-panel">
             <div class="jsonl-label">
@@ -766,6 +924,25 @@
         description: "Infer the target participant’s current mental state from a five-second close-up clip.",
         field: "Q1 · mental state",
         id: "state:ES2002a_state0004_w0",
+        video: "videos/target_closeup_0.mp4",
+        videoLabel: "Task 1 close-up video for participant A",
+        question: "What is participant A's state in the given video?",
+        options: [
+          "DISENGAGED_WITHDRAWAL",
+          "HESITATION",
+          "CONFUSED_BEWILDERMENT",
+          "COGNITIVE_CONFLICT",
+          "SUPPORTIVE_ENDORSEMENT",
+          "FOCUSED_LISTENING",
+          "ACTIVE_ENGAGEMENT"
+        ],
+        answer: "COGNITIVE_CONFLICT",
+        map: [
+          { position: "Closeup1 · target", agent: "A", target: true },
+          { position: "Closeup2", agent: "C" },
+          { position: "Closeup3", agent: "D" },
+          { position: "Closeup4", agent: "B" }
+        ],
         record: {
           id: "state:ES2002a_state0004_w0",
           task: "state",
@@ -773,7 +950,21 @@
           source_bundle_name: "ES2002a_state0004",
           session_id: "ES2002a",
           window_index: 0,
-          answers: { Q1: "COGNITIVE_CONFLICT" }
+          answers: { Q1: "COGNITIVE_CONFLICT" },
+          questions: {
+            Q1: {
+              text: "What is participant A's state in the given video?",
+              options: [
+                "DISENGAGED_WITHDRAWAL",
+                "HESITATION",
+                "CONFUSED_BEWILDERMENT",
+                "COGNITIVE_CONFLICT",
+                "SUPPORTIVE_ENDORSEMENT",
+                "FOCUSED_LISTENING",
+                "ACTIVE_ENGAGEMENT"
+              ]
+            }
+          }
         }
       },
       task21: {
@@ -781,13 +972,34 @@
         title: "Task 2.1 · Addressee Identification",
         description: "Identify who the current speaker addresses using the global Corner view.",
         field: "Q1 · addressee",
-        id: "you:ES2002a_you0008",
+        id: "you:ES2010b_you0018",
+        video: "videos/task2_1_addressee.mp4",
+        videoLabel: "Task 2.1 Corner-view video from meeting ES2010b",
+        question: "In this clip, when C says 'you' around 3.0s, who specifically is C referring to?",
+        options: ["A", "B", "C", "D", "MULTIPLE", "UNKNOWN"],
+        answer: "A",
+        map: [
+          { position: "Top left · Closeup1", agent: "D" },
+          { position: "Top right · Closeup2", agent: "B" },
+          { position: "Bottom left · Closeup3", agent: "C" },
+          { position: "Bottom right · Closeup4", agent: "A", target: true }
+        ],
         record: {
-          id: "you:ES2002a_you0008",
+          id: "you:ES2010b_you0018",
           task: "you",
-          bundle_name: "ES2002a_you0008",
-          session_id: "ES2002a",
-          answers: { Q1: "D", Q2: "SUPPORT" }
+          bundle_name: "ES2010b_you0018",
+          session_id: "ES2010b",
+          answers: { Q1: "A", Q2: "SUPPORT" },
+          questions: {
+            Q1: {
+              text: "In this clip, when C says 'you' around 3.0s, who specifically is C referring to?",
+              options: ["A", "B", "C", "D", "MULTIPLE", "UNKNOWN"]
+            },
+            Q2: {
+              text: "What is A's attitude toward C's statement?",
+              options: ["SUPPORT", "OPPOSE", "NEUTRAL", "UNCERTAIN"]
+            }
+          }
         }
       },
       task22: {
@@ -795,13 +1007,34 @@
         title: "Task 2.2 · Attitude Inference",
         description: "Infer the addressee’s stance from the synchronized 2×2 close-up mosaic.",
         field: "Q2 · attitude",
-        id: "you:ES2002a_you0008",
+        id: "you:ES2010b_you0018",
+        video: "videos/task2_2_stance.mp4",
+        videoLabel: "Task 2.2 close-up mosaic from meeting ES2010b",
+        question: "What is A's attitude toward C's statement?",
+        options: ["SUPPORT", "OPPOSE", "NEUTRAL", "UNCERTAIN"],
+        answer: "SUPPORT",
+        map: [
+          { position: "Top left · Closeup1", agent: "D" },
+          { position: "Top right · Closeup2", agent: "B" },
+          { position: "Bottom left · Closeup3", agent: "C" },
+          { position: "Bottom right · Closeup4", agent: "A", target: true }
+        ],
         record: {
-          id: "you:ES2002a_you0008",
+          id: "you:ES2010b_you0018",
           task: "you",
-          bundle_name: "ES2002a_you0008",
-          session_id: "ES2002a",
-          answers: { Q1: "D", Q2: "SUPPORT" }
+          bundle_name: "ES2010b_you0018",
+          session_id: "ES2010b",
+          answers: { Q1: "A", Q2: "SUPPORT" },
+          questions: {
+            Q1: {
+              text: "In this clip, when C says 'you' around 3.0s, who specifically is C referring to?",
+              options: ["A", "B", "C", "D", "MULTIPLE", "UNKNOWN"]
+            },
+            Q2: {
+              text: "What is A's attitude toward C's statement?",
+              options: ["SUPPORT", "OPPOSE", "NEUTRAL", "UNCERTAIN"]
+            }
+          }
         }
       },
       task31: {
@@ -809,13 +1042,34 @@
         title: "Task 3.1 · Consensus Classification",
         description: "Classify whether the group reaches true, pseudo, no, or uncertain consensus.",
         field: "Q1 · consensus",
-        id: "consensus:ES2003d_consensus0005",
+        id: "consensus:ES2007b_consensus0009",
+        video: "videos/ES2007b_consensus0009.mp4",
+        videoLabel: "Task 3 consensus mosaic from meeting ES2007b",
+        question: "What is the quality of group consensus at this moment?",
+        options: ["TRUE_CONSENSUS", "PSEUDO_CONSENSUS", "NO_CONSENSUS", "UNCERTAIN"],
+        answer: "PSEUDO_CONSENSUS",
+        map: [
+          { position: "Top left · Closeup1", agent: "D" },
+          { position: "Top right · Closeup2", agent: "B" },
+          { position: "Bottom left · Closeup3", agent: "C", target: true },
+          { position: "Bottom right · Closeup4", agent: "A" }
+        ],
         record: {
-          id: "consensus:ES2003d_consensus0005",
+          id: "consensus:ES2007b_consensus0009",
           task: "consensus",
-          bundle_name: "ES2003d_consensus0005",
-          session_id: "ES2003d",
-          answers: { Q1: "PSEUDO_CONSENSUS", Q2: "B" }
+          bundle_name: "ES2007b_consensus0009",
+          session_id: "ES2007b",
+          answers: { Q1: "PSEUDO_CONSENSUS", Q2: "C" },
+          questions: {
+            Q1: {
+              text: "What is the quality of group consensus at this moment?",
+              options: ["TRUE_CONSENSUS", "PSEUDO_CONSENSUS", "NO_CONSENSUS", "UNCERTAIN"]
+            },
+            Q2: {
+              text: "If pseudo-consensus, who appears to have weak buy-in or hidden disagreement?",
+              options: ["A", "B", "C", "D", "NONE"]
+            }
+          }
         }
       },
       task32: {
@@ -823,13 +1077,34 @@
         title: "Task 3.2 · Dissenter Identification",
         description: "When pseudo-consensus is present, identify the participant with hidden dissent.",
         field: "Q2 · dissenter",
-        id: "consensus:ES2003d_consensus0005",
+        id: "consensus:ES2007b_consensus0009",
+        video: "videos/ES2007b_consensus0009.mp4",
+        videoLabel: "Task 3 consensus mosaic from meeting ES2007b",
+        question: "If pseudo-consensus, who appears to have weak buy-in or hidden disagreement?",
+        options: ["A", "B", "C", "D", "NONE"],
+        answer: "C",
+        map: [
+          { position: "Top left · Closeup1", agent: "D" },
+          { position: "Top right · Closeup2", agent: "B" },
+          { position: "Bottom left · Closeup3", agent: "C", target: true },
+          { position: "Bottom right · Closeup4", agent: "A" }
+        ],
         record: {
-          id: "consensus:ES2003d_consensus0005",
+          id: "consensus:ES2007b_consensus0009",
           task: "consensus",
-          bundle_name: "ES2003d_consensus0005",
-          session_id: "ES2003d",
-          answers: { Q1: "PSEUDO_CONSENSUS", Q2: "B" }
+          bundle_name: "ES2007b_consensus0009",
+          session_id: "ES2007b",
+          answers: { Q1: "PSEUDO_CONSENSUS", Q2: "C" },
+          questions: {
+            Q1: {
+              text: "What is the quality of group consensus at this moment?",
+              options: ["TRUE_CONSENSUS", "PSEUDO_CONSENSUS", "NO_CONSENSUS", "UNCERTAIN"]
+            },
+            Q2: {
+              text: "If pseudo-consensus, who appears to have weak buy-in or hidden disagreement?",
+              options: ["A", "B", "C", "D", "NONE"]
+            }
+          }
         }
       }
     };
@@ -839,6 +1114,10 @@
     const taskTitle = document.getElementById("task-example-title");
     const taskDescription = document.getElementById("task-example-description");
     const taskField = document.getElementById("task-field");
+    const taskVideo = document.getElementById("task-video");
+    const taskQuestion = document.getElementById("task-question");
+    const groundTruthValue = document.getElementById("ground-truth-value");
+    const mapGrid = document.getElementById("map-grid");
     const jsonlSourceId = document.getElementById("jsonl-source-id");
     const jsonlRecord = document.getElementById("jsonl-record");
 
@@ -847,9 +1126,38 @@
       taskTitle.textContent = example.title;
       taskDescription.textContent = example.description;
       taskField.textContent = example.field;
+      taskQuestion.textContent = example.question;
+      groundTruthValue.textContent = example.answer;
       jsonlSourceId.textContent = example.id;
       jsonlRecord.textContent = JSON.stringify(example.record, null, 2);
       taskPanel.setAttribute("aria-labelledby", example.tabId);
+
+      if (taskVideo.getAttribute("src") !== example.video) {
+        taskVideo.pause();
+        taskVideo.src = example.video;
+        taskVideo.load();
+      }
+
+      taskVideo.setAttribute("aria-label", example.videoLabel);
+
+      mapGrid.replaceChildren();
+      example.map.forEach((entry) => {
+        const tile = document.createElement("div");
+        tile.className = "map-tile";
+
+        if (entry.target) tile.classList.add("is-target");
+
+        const position = document.createElement("span");
+        position.className = "map-position";
+        position.textContent = entry.position;
+
+        const agent = document.createElement("span");
+        agent.className = "map-agent";
+        agent.textContent = `Participant ${entry.agent}`;
+
+        tile.append(position, agent);
+        mapGrid.appendChild(tile);
+      });
 
       taskTabs.forEach((tab) => {
         const isActive = tab.dataset.task === taskKey;
@@ -941,4 +1249,3 @@
   </script>
 </body>
 </html>
-
